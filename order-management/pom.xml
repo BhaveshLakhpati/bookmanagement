@@ -7,12 +7,12 @@
 		<artifactId>bookmanagement</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>eureka-registry-server</artifactId>
+	<artifactId>order-management</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 			<version>${eureka.version}</version>
 		</dependency>
 	</dependencies>
