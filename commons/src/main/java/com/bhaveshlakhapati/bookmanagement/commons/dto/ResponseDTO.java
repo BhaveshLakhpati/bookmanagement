@@ -1,4 +1,4 @@
-package com.bhaveshlakhapati.bookmanagement.bookservice.dto;
+package com.bhaveshlakhapati.bookmanagement.commons.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseDTO {
+public class ResponseDTO<T> {
 	private boolean success;
-	private Object body;
+	private T body;
 	private String message;
 }

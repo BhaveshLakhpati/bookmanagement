@@ -1,4 +1,4 @@
-package com.bhaveshlakhapati.bookmanagement.bookservice.dto;
+package com.bhaveshlakhapati.bookmanagement.commons.dto;
 
 import lombok.Data;
 
