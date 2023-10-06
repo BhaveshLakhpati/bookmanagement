@@ -10,4 +10,5 @@ public class BookDTO {
 	private String isbn;
 	private Double price;
 	private Integer quantity;
+	private String imageURL;
 }

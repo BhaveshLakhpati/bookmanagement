@@ -36,4 +36,7 @@ public class Book extends BaseEntity {
 
 	@Min(value = 0, message = "Book QUANTITY should not be less than 0")
 	private Integer quantity;
+
+	@NotEmpty(message = "Book image cannot be empty.")
+	private String imageURL;
 }

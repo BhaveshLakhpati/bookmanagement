@@ -73,5 +73,6 @@
 		<module>order-management</module>
 		<module>cart-service</module>
 		<module>commons</module>
+		<module>api-gateway</module>
 	</modules>
 </project>
