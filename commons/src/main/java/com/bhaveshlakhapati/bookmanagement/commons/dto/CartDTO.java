@@ -6,5 +6,4 @@ import lombok.Data;
 public class CartDTO {
 	private String isbn;
 	private String userId;
-	private int quantity;
 }

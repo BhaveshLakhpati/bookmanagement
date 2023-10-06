@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bhaveshlakhapati.bookmanagement.cartservice.dto.CartDTO;
 import com.bhaveshlakhapati.bookmanagement.cartservice.service.CartService;
 import com.bhaveshlakhapati.bookmanagement.commons.controller.BaseController;
+import com.bhaveshlakhapati.bookmanagement.commons.dto.CartDTO;
 
 @RestController
 public class CartController extends BaseController {
@@ -26,10 +26,10 @@ public class CartController extends BaseController {
 		ResponseEntity<String> response;
 		Optional<String> errorMessage = this.cartService.addToCart(cartDTO);
 
-		if (errorMessage.isEmpty()) {
-			response = success(null);
-		} else {
+		if (errorMessage.isPresent()) {
 			response = failure(errorMessage.get());
+		} else {
+			response = success(null);
 		}
 
 		return response;
@@ -40,10 +40,10 @@ public class CartController extends BaseController {
 		ResponseEntity<String> response;
 		Optional<String> errorMessage = this.cartService.removeFromCart(cartDTO);
 
-		if (errorMessage.isEmpty()) {
-			response = success(null);
-		} else {
+		if (errorMessage.isPresent()) {
 			response = failure(errorMessage.get());
+		} else {
+			response = success(null);
 		}
 
 		return response;

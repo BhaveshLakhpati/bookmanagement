@@ -2,11 +2,11 @@ package com.bhaveshlakhapati.bookmanagement.commons.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -17,9 +17,9 @@ public abstract class BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotNull
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime createdAt;
 
-	@NotNull
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime updatedAt;
 }

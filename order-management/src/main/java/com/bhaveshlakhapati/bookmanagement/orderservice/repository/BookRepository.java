@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.bhaveshlakhapati.bookmanagement.commons.entity.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-	List<Book> findAllByIsbn(final List<String> isbnList);
+	List<Book> findAllByIsbnIn(final List<String> isbnList);
 }

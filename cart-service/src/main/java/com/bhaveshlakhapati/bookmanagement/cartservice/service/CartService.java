@@ -2,15 +2,17 @@ package com.bhaveshlakhapati.bookmanagement.cartservice.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bhaveshlakhapati.bookmanagement.cartservice.dto.CartDTO;
 import com.bhaveshlakhapati.bookmanagement.cartservice.entity.Cart;
 import com.bhaveshlakhapati.bookmanagement.cartservice.feignclient.BookServiceFeignClient;
 import com.bhaveshlakhapati.bookmanagement.cartservice.repository.CartRepository;
+import com.bhaveshlakhapati.bookmanagement.commons.dto.CartDTO;
 import com.bhaveshlakhapati.bookmanagement.commons.entity.Book;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -30,13 +32,13 @@ public class CartService {
 		Optional<String> errorMessage;
 
 		try {
-			Optional<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(cartDTO.getIsbn()).getBody();
+			ResponseEntity<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(cartDTO.getIsbn());
 
-			if (bookByISBN.isPresent()) {
-				Book book = bookByISBN.get();
+			if (bookByISBN.hasBody()) {
+				Book book = bookByISBN.getBody();
 
 				if (book.getQuantity() > 0) {
-					Cart cart = Cart.builder().userId(cartDTO.getUserId()).book(book).build();
+					Cart cart = Cart.builder().userId(cartDTO.getUserId()).book(book).quantity(1).build();
 					this.cartRepository.save(cart);
 
 					errorMessage = Optional.empty();
@@ -58,9 +60,9 @@ public class CartService {
 		Optional<String> errorMessage;
 
 		try {
-			Optional<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(cartDTO.getIsbn()).getBody();
-			if (bookByISBN.isPresent()) {
-				Book book = bookByISBN.get();
+			ResponseEntity<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(cartDTO.getIsbn());
+			if (bookByISBN.hasBody()) {
+				Book book = bookByISBN.getBody();
 				this.cartRepository.deleteByBookAndUserId(book, cartDTO.getUserId());
 
 				errorMessage = Optional.empty();
@@ -76,7 +78,7 @@ public class CartService {
 
 	public List<CartDTO> getCartItems(final String userId) {
 		List<CartDTO> bookISBNList = this.cartRepository.findByUserId(userId).stream()
-				.map(cartItem -> this.objectMapper.convertValue(cartItem, CartDTO.class)).toList();
+				.map(cartItem -> this.objectMapper.convertValue(cartItem, CartDTO.class)).collect(Collectors.toList());
 
 		return bookISBNList;
 	}

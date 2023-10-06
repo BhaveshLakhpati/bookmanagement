@@ -1,7 +1,7 @@
 package com.bhaveshlakhapati.bookmanagement.bookservice.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -30,15 +30,15 @@ public class BookController extends BaseController {
 	@GetMapping(path = "/all-books")
 	public ResponseEntity<?> getAvbailableBooks() {
 		List<BookDTO> bookDTOList = this.bookService.getAvailableBooks().stream()
-				.map(book -> objectMapper.convertValue(book, BookDTO.class)).toList();
+				.map(book -> objectMapper.convertValue(book, BookDTO.class)).collect(Collectors.toList());
 
 		return success(bookDTOList);
 	}
 
-	@GetMapping(path = "/book/{isbn}")
-	public ResponseEntity<Optional<BookDTO>> getBookByISBN(@PathVariable @NotEmpty final String isbn) {
-		Optional<BookDTO> bookByISBN = this.bookService.getBookByISBN(isbn)
-				.map(book -> this.objectMapper.convertValue(book, BookDTO.class));
+	@GetMapping("/book/{isbn}")
+	public ResponseEntity<BookDTO> getBookByISBN(@PathVariable @NotEmpty final String isbn) {
+		BookDTO bookByISBN = this.bookService.getBookByISBN(isbn)
+				.map(book -> this.objectMapper.convertValue(book, BookDTO.class)).orElse(null);
 
 		return success(bookByISBN);
 	}

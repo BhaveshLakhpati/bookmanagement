@@ -10,7 +10,7 @@ import com.bhaveshlakhapati.bookmanagement.commons.entity.Book;
 public interface BookRepository extends JpaRepository<Book, Long> {
 	Optional<Book> findByIsbn(final String isbn);
 
-	List<Book> findAllWhereQuantityGreaterThan(final int quantity);
+	List<Book> findAllByQuantityGreaterThan(final int quantity);
 
-	List<Book> findAllWhereIsbnIn(final List<String> isbnList);
+	List<Book> findAllByIsbnIn(final List<String> isbnList);
 }

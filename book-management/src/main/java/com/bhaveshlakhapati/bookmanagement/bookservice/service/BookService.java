@@ -16,7 +16,7 @@ public class BookService {
 	private BookRepository bookRepository;
 
 	public List<Book> getAvailableBooks() {
-		List<Book> availableBooks = this.bookRepository.findAllWhereQuantityGreaterThan(0);
+		List<Book> availableBooks = this.bookRepository.findAllByQuantityGreaterThan(0);
 
 		return availableBooks;
 	}
@@ -43,7 +43,7 @@ public class BookService {
 	}
 
 	public List<Book> getBooksByISBNList(final List<String> isbnList) {
-		List<Book> booksByISBN = this.bookRepository.findAllWhereIsbnIn(isbnList);
+		List<Book> booksByISBN = this.bookRepository.findAllByIsbnIn(isbnList);
 
 		return booksByISBN;
 	}

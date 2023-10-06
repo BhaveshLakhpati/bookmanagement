@@ -27,10 +27,10 @@ public class OrderService {
 
 	@Transactional
 	public Map<String, Integer> addOrder(final String userId, final List<CartDTO> cartItems) {
-		List<String> isbnList = cartItems.stream().map(CartDTO::getIsbn).toList();
+		List<String> isbnList = cartItems.stream().map(CartDTO::getIsbn).collect(Collectors.toList());
 
 		// Step 1: find all books by ISBN
-		List<Book> booksByISBN = this.bookRepository.findAllByIsbn(isbnList);
+		List<Book> booksByISBN = this.bookRepository.findAllByIsbnIn(isbnList);
 
 		// Step 2: create map of ISBN, Book
 		Map<String, Book> stockDetails = booksByISBN.stream()
@@ -38,7 +38,7 @@ public class OrderService {
 
 		for (CartDTO cartItem : cartItems) {
 			stockDetails.computeIfPresent(cartItem.getIsbn(), (isbn, book) -> {
-				int newQuantity = book.getQuantity() - cartItem.getQuantity();
+				int newQuantity = book.getQuantity() - 1;
 				book.setQuantity(newQuantity);
 
 				return book;
@@ -48,15 +48,16 @@ public class OrderService {
 		Map<String, Integer> insufficientStockDetails;
 
 		// Step 3: check if stock of any book is insufficient
-		List<Book> insufficientStock = stockDetails.values().stream().filter(book -> book.getQuantity() < 0).toList();
+		List<Book> insufficientStock = stockDetails.values().stream().filter(book -> book.getQuantity() < 0)
+				.collect(Collectors.toList());
 		if (insufficientStock.isEmpty()) {
 
 			// Step 4: create order objects
 			List<Order> orders = cartItems.stream().map(cartItem -> {
 				Book book = stockDetails.get(cartItem.getIsbn());
 
-				return Order.builder().book(book).quantity(cartItem.getQuantity()).userId(userId).build();
-			}).toList();
+				return Order.builder().book(book).userId(userId).build();
+			}).collect(Collectors.toList());
 
 			this.bookRepository.saveAll(stockDetails.values());
 			this.orderRepository.saveAll(orders);
