@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bhaveshlakhapati.bookmanagement.bookservice.entity.Book;
 import com.bhaveshlakhapati.bookmanagement.bookservice.repository.BookRepository;
+import com.bhaveshlakhapati.bookmanagement.commons.entity.Book;
 
 @Service
 public class BookService {
@@ -22,7 +22,7 @@ public class BookService {
 	}
 
 	public Optional<Book> getBookByISBN(final String isbn) {
-		Optional<Book> book = this.bookRepository.findByISBN(isbn);
+		Optional<Book> book = this.bookRepository.findByIsbn(isbn);
 
 		return book;
 	}
@@ -40,5 +40,11 @@ public class BookService {
 		}
 
 		return book;
+	}
+
+	public List<Book> getBooksByISBNList(final List<String> isbnList) {
+		List<Book> booksByISBN = this.bookRepository.findAllWhereIsbnIn(isbnList);
+
+		return booksByISBN;
 	}
 }

@@ -1,4 +1,4 @@
-package com.bhaveshlakhapati.bookmanagement.cartservice.entity;
+package com.bhaveshlakhapati.bookmanagement.orderservice.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,13 +17,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @Entity
-@Table(name = Cart.TABLE_NAME)
-public class Cart extends BaseEntity {
-	public static final String TABLE_NAME = "hg_cart";
+@Table(name = Order.TABLE_NAME)
+public class Order extends BaseEntity {
+	public static final String TABLE_NAME = "hg_order";
 
 	@OneToOne
 	private Book book;
 
+	@Column(nullable = false)
 	@Min(value = 1)
 	private int quantity;
 

@@ -1,4 +1,4 @@
-package com.bhaveshlakhapati.bookmanagement.bookservice.entity;
+package com.bhaveshlakhapati.bookmanagement.commons.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
