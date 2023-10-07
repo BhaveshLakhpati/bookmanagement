@@ -13,6 +13,7 @@ import com.bhaveshlakhapati.bookmanagement.cartservice.entity.Cart;
 import com.bhaveshlakhapati.bookmanagement.cartservice.feignclient.BookServiceFeignClient;
 import com.bhaveshlakhapati.bookmanagement.cartservice.repository.CartRepository;
 import com.bhaveshlakhapati.bookmanagement.commons.dto.CartDTO;
+import com.bhaveshlakhapati.bookmanagement.commons.dto.CartRequestDTO;
 import com.bhaveshlakhapati.bookmanagement.commons.entity.Book;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,17 +29,17 @@ public class CartService {
 	private ObjectMapper objectMapper;
 
 	@Transactional
-	public Optional<String> addToCart(final CartDTO cartDTO) {
+	public Optional<String> addToCart(final String userId, final String isbn) {
 		Optional<String> errorMessage;
 
 		try {
-			ResponseEntity<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(cartDTO.getIsbn());
+			ResponseEntity<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(isbn);
 
 			if (bookByISBN.hasBody()) {
 				Book book = bookByISBN.getBody();
 
 				if (book.getQuantity() > 0) {
-					Cart cart = Cart.builder().userId(cartDTO.getUserId()).book(book).quantity(1).build();
+					Cart cart = Cart.builder().userId(userId).book(book).build();
 					this.cartRepository.save(cart);
 
 					errorMessage = Optional.empty();
@@ -56,14 +57,14 @@ public class CartService {
 	}
 
 	@Transactional
-	public Optional<String> removeFromCart(final CartDTO cartDTO) {
+	public Optional<String> removeFromCart(final CartRequestDTO cartRequestDTO) {
 		Optional<String> errorMessage;
 
 		try {
-			ResponseEntity<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(cartDTO.getIsbn());
+			ResponseEntity<Book> bookByISBN = this.bookServiceFeignClient.getBookByISBN(cartRequestDTO.getIsbn());
 			if (bookByISBN.hasBody()) {
 				Book book = bookByISBN.getBody();
-				this.cartRepository.deleteByBookAndUserId(book, cartDTO.getUserId());
+				this.cartRepository.deleteByBookAndUserId(book, cartRequestDTO.getUserId());
 
 				errorMessage = Optional.empty();
 			} else {
